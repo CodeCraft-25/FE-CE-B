@@ -377,7 +377,11 @@
     <header>
       <h1>AcadPlan: Smart Academic Scheduler & Planner</h1>
       <p>Organize and manage your academic activities efficiently. Stay consistent and never miss important deadlines!</p>
-      <button id="logoutBtn">Logout</button>
+      <header>
+        <div>
+          <button id="logoutBtn">Logout</button>
+        </div>
+      </header>
     </header>
 
     <section class="feature">
@@ -416,6 +420,14 @@
       <button type="button" onclick="sendEmailReminder()">Send Test Email Reminder</button>
       <div id="notificationStatus" role="status" aria-live="polite"></div>
     </section>
+    <center>"All Rights Reserved © 2025 Acad Plan"</center>
+    <p>
+    <center>
+          <a href="/home">Home</a>
+          <a href="/about">About</a>
+          <a href="/contact us">Contact us</a>
+          </center>
+          </p>
   </div>
 
   <script>
@@ -525,14 +537,34 @@
       const timetableList = document.getElementById('timetableList');
 
       function loadTimetable() {
-        const timetable = JSON.parse(localStorage.getItem('timetable') || '[]');
-        timetableList.innerHTML = '';
-        timetable.forEach((item, idx) => {
-          const li = document.createElement('li');
-          li.textContent = `${item.subject} - ${new Date(item.datetime).toLocaleString()}`;
-          timetableList.appendChild(li);
-        });
-      }
+  const timetable = JSON.parse(localStorage.getItem('timetable') || '[]');
+  timetableList.innerHTML = '';
+  timetable.forEach((item, idx) => {
+    const li = document.createElement('li');
+    li.textContent = `${item.subject} - ${new Date(item.datetime).toLocaleString()}`;
+
+    // Add delete button
+    const deleteBtn = document.createElement('button');
+    deleteBtn.textContent = '×';
+    deleteBtn.style.background = 'transparent';
+    deleteBtn.style.border = 'none';
+    deleteBtn.style.color = '#999';
+    deleteBtn.style.fontSize = '1.4rem';
+    deleteBtn.style.cursor = 'pointer';
+    deleteBtn.title = 'Delete exam';
+    deleteBtn.setAttribute('aria-label', `Delete exam ${item.subject}`);
+
+    deleteBtn.addEventListener('click', () => {
+      timetable.splice(idx, 1);
+      localStorage.setItem('timetable', JSON.stringify(timetable));
+      loadTimetable();
+    });
+
+    li.appendChild(deleteBtn);
+    timetableList.appendChild(li);
+  });
+}
+
 
       timetableForm.addEventListener('submit', (e) => {
         e.preventDefault();
